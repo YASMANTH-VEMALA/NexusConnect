@@ -104,7 +104,7 @@ export const mockNotifications: Notification[] = [
         content: 'liked your post.',
         createdAt: '1h ago',
         read: false,
-        link: '#'
+        link: '/posts/post-3'
     },
     {
         id: 'notif-3',
@@ -113,7 +113,7 @@ export const mockNotifications: Notification[] = [
         content: 'commented on your post: "This is awesome!"',
         createdAt: '3h ago',
         read: true,
-        link: '#'
+        link: '/posts/post-3'
     },
     {
         id: 'notif-4',
@@ -122,7 +122,7 @@ export const mockNotifications: Notification[] = [
         content: 'published a new post.',
         createdAt: 'yesterday',
         read: true,
-        link: '#'
+        link: '/posts/post-2'
     }
 ];
 
