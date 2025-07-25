@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Compass, User, LogOut, Settings, Bell, MessageSquare } from 'lucide-react';
+import { Home, Compass, User, LogOut, Settings, Bell, MessageSquare, LayoutDashboard } from 'lucide-react';
 
 import {
   Sidebar,
@@ -20,7 +20,7 @@ import { mockCurrentUser } from '@/lib/mock-data';
 
 export function AppSidebar() {
   const pathname = usePathname();
-  const isActive = (path: string) => pathname.startsWith(path);
+  const isActive = (path: string) => pathname === path || (path !== '/' && pathname.startsWith(path));
 
   return (
     <Sidebar>
@@ -41,6 +41,14 @@ export function AppSidebar() {
       </SidebarHeader>
       <SidebarContent>
         <SidebarMenu>
+          <SidebarMenuItem>
+             <SidebarMenuButton asChild isActive={pathname === '/dashboard'}>
+              <Link href="/dashboard">
+                <LayoutDashboard />
+                Dashboard
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton asChild isActive={pathname === '/'}>
               <Link href="/">
