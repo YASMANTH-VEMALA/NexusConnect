@@ -22,3 +22,29 @@ export type Post = {
   likes: number;
   comments: number;
 };
+
+export type Notification = {
+  id: string;
+  user: Pick<User, 'id' | 'name' | 'avatarUrl'>;
+  type: 'like' | 'comment' | 'new_post' | 'collab_request' | 'collab_accepted';
+  content: string;
+  createdAt: string;
+  read: boolean;
+  link: string;
+};
+
+export type Message = {
+    id: string;
+    sender: Pick<User, 'id' | 'name' | 'avatarUrl'>;
+    content: string;
+    createdAt: string;
+    read: boolean;
+};
+
+export type Chat = {
+    id: string;
+    user: Pick<User, 'id' | 'name' | 'avatarUrl'>;
+    lastMessage: string;
+    lastMessageAt: string;
+    unreadCount: number;
+};

@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Compass, User, LogOut, Settings } from 'lucide-react';
+import { Home, Compass, User, LogOut, Settings, Bell, MessageSquare } from 'lucide-react';
 
 import {
   Sidebar,
@@ -20,7 +20,7 @@ import { mockCurrentUser } from '@/lib/mock-data';
 
 export function AppSidebar() {
   const pathname = usePathname();
-  const isActive = (path: string) => pathname === path;
+  const isActive = (path: string) => pathname.startsWith(path);
 
   return (
     <Sidebar>
@@ -42,7 +42,7 @@ export function AppSidebar() {
       <SidebarContent>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild isActive={isActive('/')}>
+            <SidebarMenuButton asChild isActive={pathname === '/'}>
               <Link href="/">
                 <Home />
                 Home
@@ -54,6 +54,22 @@ export function AppSidebar() {
               <Link href="/discover">
                 <Compass />
                 Discover
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild isActive={isActive('/messages')}>
+              <Link href="/messages">
+                <MessageSquare />
+                Messages
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild isActive={isActive('/notifications')}>
+              <Link href="/notifications">
+                <Bell />
+                Notifications
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>

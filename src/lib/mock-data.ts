@@ -1,4 +1,4 @@
-import type { User, Post } from './types';
+import type { User, Post, Notification, Chat, Message } from './types';
 
 export const mockCurrentUser: User = {
   id: 'user-1',
@@ -85,4 +85,87 @@ export const mockPosts: Post[] = [
     likes: 99,
     comments: 18,
   },
+];
+
+export const mockNotifications: Notification[] = [
+    {
+        id: 'notif-1',
+        user: mockUsers[1],
+        type: 'collab_request',
+        content: 'sent you a collaboration request.',
+        createdAt: '15m ago',
+        read: false,
+        link: `/profile/${mockUsers[1].id}`
+    },
+    {
+        id: 'notif-2',
+        user: mockUsers[2],
+        type: 'like',
+        content: 'liked your post.',
+        createdAt: '1h ago',
+        read: false,
+        link: '#'
+    },
+    {
+        id: 'notif-3',
+        user: mockUsers[1],
+        type: 'comment',
+        content: 'commented on your post: "This is awesome!"',
+        createdAt: '3h ago',
+        read: true,
+        link: '#'
+    },
+    {
+        id: 'notif-4',
+        user: mockUsers[2],
+        type: 'new_post',
+        content: 'published a new post.',
+        createdAt: 'yesterday',
+        read: true,
+        link: '#'
+    }
+];
+
+export const mockChats: Chat[] = [
+    {
+        id: 'chat-1',
+        user: mockUsers[1],
+        lastMessage: 'Sure, I can help with that!',
+        lastMessageAt: '10m',
+        unreadCount: 2,
+    },
+    {
+        id: 'chat-2',
+        user: mockUsers[2],
+        lastMessage: 'Project update is looking good.',
+        lastMessageAt: '1h',
+        unreadCount: 0,
+    }
+];
+
+export const mockMessages: (Message & { userId: string })[] = [
+    {
+        id: 'msg-1',
+        userId: 'user-2',
+        sender: mockUsers[1],
+        content: 'Hey Alex! Got your collaboration request. I\'d love to hear more about your project.',
+        createdAt: '10m ago',
+        read: true,
+    },
+    {
+        id: 'msg-2',
+        userId: 'user-1',
+        sender: mockCurrentUser,
+        content: 'Awesome! I\'m working on a new mobile app concept and I think your backend skills would be a perfect fit.',
+        createdAt: '8m ago',
+        read: false,
+    },
+    {
+        id: 'msg-3',
+        userId: 'user-2',
+        sender: mockUsers[1],
+        content: 'Sounds intriguing! Send me the details.',
+        createdAt: '7m ago',
+        read: false,
+    }
 ];
