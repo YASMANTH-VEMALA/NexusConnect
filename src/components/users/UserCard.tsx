@@ -20,8 +20,8 @@ export function UserCard({ user }: UserCardProps) {
            <Image
             src={user.bannerUrl}
             alt={`${user.name}'s banner`}
-            layout="fill"
-            objectFit="cover"
+            fill
+            className="object-cover"
             data-ai-hint="abstract background"
           />
         </div>
