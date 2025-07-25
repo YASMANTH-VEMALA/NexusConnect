@@ -46,8 +46,8 @@ export default function HomePage() {
   const trendingSkills = getTrendingSkills();
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-      <div className="lg:col-span-2 space-y-6">
+    <div className="grid grid-cols-1 lg:grid-cols-[1fr,320px] gap-8 items-start">
+      <div className="space-y-6">
         <h1 className="text-2xl font-bold font-headline">Home Feed</h1>
         <CreatePost />
         <Separator/>
@@ -57,7 +57,7 @@ export default function HomePage() {
           ))}
         </div>
       </div>
-      <div className="lg:col-span-1 space-y-6 sticky top-8">
+      <div className="space-y-6 sticky top-8">
          {/* My Profile Card */}
         <Card className="overflow-hidden">
             <CardHeader className="p-0">

@@ -26,6 +26,7 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarHeader>
         <div className="flex items-center gap-2">
+           <SidebarTrigger />
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -36,7 +37,6 @@ export function AppSidebar() {
           </svg>
           <span className="text-lg font-semibold">NexusConnect</span>
           <div className="grow" />
-          <SidebarTrigger />
         </div>
       </SidebarHeader>
       <SidebarContent>
