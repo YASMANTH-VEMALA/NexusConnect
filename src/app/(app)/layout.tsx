@@ -14,10 +14,8 @@ export default function AppLayout({
       <SidebarInset>
          <div className="p-4 md:p-6 lg:p-8">
             <div className="md:hidden mb-4">
-              <SidebarTrigger asChild>
-                <Button variant="outline" size="icon">
-                  <PanelLeft />
-                </Button>
+              <SidebarTrigger>
+                <PanelLeft />
               </SidebarTrigger>
             </div>
             {children}
