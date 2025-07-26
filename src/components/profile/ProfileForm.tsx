@@ -24,6 +24,7 @@ import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import type { SuggestInterestsOutput } from '@/ai/flows/suggest-interests';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { useRouter } from 'next/navigation';
 
 const profileFormSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
@@ -43,6 +44,7 @@ interface ProfileFormProps {
 
 export function ProfileForm({ user }: ProfileFormProps) {
   const { toast } = useToast();
+  const router = useRouter();
   const [isSuggesting, setIsSuggesting] = useState(false);
   const [suggestions, setSuggestions] = useState<SuggestInterestsOutput | null>(null);
 
@@ -101,6 +103,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
       description: 'Your changes have been saved successfully.',
     });
     console.log(data);
+    router.push('/profile');
   }
 
   return (
