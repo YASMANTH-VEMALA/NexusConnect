@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Compass, User, LogOut, Settings, Bell, MessageSquare } from 'lucide-react';
+import { Home, Compass, User, LogOut, Settings, Bell, MessageSquare, PanelLeft } from 'lucide-react';
 
 import {
   Sidebar,
@@ -14,6 +14,7 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
   SidebarSeparator,
+  SidebarRail,
 } from '@/components/ui/sidebar';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { mockCurrentUser } from '@/lib/mock-data';
@@ -24,9 +25,10 @@ export function AppSidebar() {
 
   return (
     <Sidebar>
+      <SidebarRail />
       <SidebarHeader>
         <div className="flex items-center gap-2">
-           <SidebarTrigger />
+           <SidebarTrigger className="hidden md:flex" />
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
