@@ -12,10 +12,12 @@ export default function AppLayout({
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-         <div className="p-4 md:p-6 lg:p-8">
+         <div className="p-4 md:p-6 lg:p-8 h-full">
             <div className="md:hidden mb-4">
-              <SidebarTrigger>
-                <PanelLeft />
+               <SidebarTrigger>
+                  <Button variant="outline" size="icon">
+                    <PanelLeft />
+                  </Button>
               </SidebarTrigger>
             </div>
             {children}

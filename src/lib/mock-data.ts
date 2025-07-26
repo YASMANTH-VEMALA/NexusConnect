@@ -90,6 +90,36 @@ export const mockPosts: Post[] = [
   },
 ];
 
+export const mockSpotlightPosts: Post[] = [
+    {
+        id: 'spot-1',
+        author: mockUsers[2],
+        videoUrl: 'https://placehold.co/1080x1920.png',
+        content: 'My latest short film project. Let me know what you think!',
+        likes: 1200,
+        comments: 150,
+        createdAt: '1d ago',
+    },
+    {
+        id: 'spot-2',
+        author: mockUsers[1],
+        videoUrl: 'https://placehold.co/1080x1920.png',
+        content: 'A quick tutorial on setting up a Node.js server. Hope this helps someone!',
+        likes: 3400,
+        comments: 450,
+        createdAt: '3d ago',
+    },
+    {
+        id: 'spot-3',
+        author: mockUsers[0],
+        videoUrl: 'https://placehold.co/1080x1920.png',
+        content: 'Unboxing my new camera gear! So excited to start shooting with it. 📸',
+        likes: 890,
+        comments: 72,
+        createdAt: '5d ago',
+    }
+]
+
 export const mockNotifications: Notification[] = [
     {
         id: 'notif-1',

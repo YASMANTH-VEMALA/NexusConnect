@@ -19,6 +19,7 @@ export type Post = {
   author: Pick<User, 'id' | 'name' | 'avatarUrl'>;
   content: string;
   imageUrl?: string;
+  videoUrl?: string;
   createdAt: string;
   likes: number;
   comments: number;

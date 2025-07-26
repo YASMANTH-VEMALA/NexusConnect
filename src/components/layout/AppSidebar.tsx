@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Compass, User, LogOut, Settings, Bell, MessageSquare, PanelLeft } from 'lucide-react';
+import { Home, Compass, User, LogOut, Settings, Bell, MessageSquare, PanelLeft, Video } from 'lucide-react';
 
 import {
   Sidebar,
@@ -56,6 +56,14 @@ export function AppSidebar() {
               <Link href="/discover">
                 <Compass />
                 Discover
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+           <SidebarMenuItem>
+            <SidebarMenuButton asChild isActive={isActive('/spotlight')}>
+              <Link href="/spotlight">
+                <Video />
+                Spotlight
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
