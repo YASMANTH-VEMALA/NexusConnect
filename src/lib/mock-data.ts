@@ -13,6 +13,7 @@ export const mockCurrentUser: User = {
   followers: 1204,
   following: 342,
   xp: 1550,
+  personality: 'Ambivert',
 };
 
 export const mockUsers: User[] = [
@@ -30,6 +31,7 @@ export const mockUsers: User[] = [
     followers: 856,
     following: 129,
     xp: 980,
+    personality: 'Introvert',
   },
   {
     id: 'user-3',
@@ -44,6 +46,7 @@ export const mockUsers: User[] = [
     followers: 2345,
     following: 501,
     xp: 2100,
+    personality: 'Extrovert',
   },
 ];
 

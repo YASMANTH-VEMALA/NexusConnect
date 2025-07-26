@@ -23,6 +23,7 @@ import { suggestInterestsAction } from '@/lib/actions';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import type { SuggestInterestsOutput } from '@/ai/flows/suggest-interests';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
 const profileFormSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
@@ -31,6 +32,7 @@ const profileFormSchema = z.object({
   bio: z.string().max(200, { message: 'Bio must not be longer than 200 characters.' }),
   skills: z.array(z.string()),
   interests: z.array(z.string()),
+  personality: z.enum(['Introvert', 'Extrovert', 'Ambivert']).optional(),
 });
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
@@ -53,6 +55,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
       bio: user.bio,
       skills: user.skills,
       interests: user.interests,
+      personality: user.personality,
     },
     mode: 'onChange',
   });
@@ -160,6 +163,51 @@ export function ProfileForm({ user }: ProfileFormProps) {
                   </FormControl>
                   <FormDescription>
                     This is a great place to showcase your personality and goals.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+             <FormField
+              control={form.control}
+              name="personality"
+              render={({ field }) => (
+                <FormItem className="space-y-3">
+                  <FormLabel>Personality Type</FormLabel>
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      className="flex flex-col space-y-1"
+                    >
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="Introvert" />
+                        </FormControl>
+                        <FormLabel className="font-normal">
+                          Introvert
+                        </FormLabel>
+                      </FormItem>
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="Extrovert" />
+                        </FormControl>
+                        <FormLabel className="font-normal">
+                          Extrovert
+                        </FormLabel>
+                      </FormItem>
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="Ambivert" />
+                        </FormControl>
+                        <FormLabel className="font-normal">
+                          Ambivert
+                        </FormLabel>
+                      </FormItem>
+                    </RadioGroup>
+                  </FormControl>
+                  <FormDescription>
+                    Help others understand your collaboration style.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

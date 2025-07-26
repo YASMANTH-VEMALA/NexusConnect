@@ -11,6 +11,7 @@ export type User = {
   followers: number;
   following: number;
   xp: number;
+  personality?: 'Introvert' | 'Extrovert' | 'Ambivert';
 };
 
 export type Post = {
