@@ -6,7 +6,7 @@ import type { User } from "@/lib/types";
 
 interface UserProfileClientProps {
   user: User;
-  currentUserId: string | undefined;
+  currentUserId: string;
 }
 
 export function UserProfileClient({ user, currentUserId }: UserProfileClientProps) {

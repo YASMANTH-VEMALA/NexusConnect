@@ -3,49 +3,42 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { PostCard } from "@/components/posts/PostCard";
-import { supabase } from "@/lib/supabase";
 import type { User } from "@/lib/types";
-import { mockPosts } from "@/lib/mock-data";
+import { mockPosts, mockUsers, mockCurrentUser } from "@/lib/mock-data";
 import { UserProfileClient } from "@/components/profile/UserProfileClient";
 
-async function getUser(id: string) {
-  const { data: user, error } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("id", id)
-    .single();
-
-  if (error || !user) {
-    notFound();
-  }
-  return user;
+function getUser(id: string): User | undefined {
+    return mockUsers.find(u => u.id === id);
 }
 
-async function getCurrentUserId() {
-    const { data: { user } } = await supabase.auth.getUser();
-    return user?.id;
+function getCurrentUserId(): string {
+    return mockCurrentUser.id;
 }
 
 
-export default async function UserProfilePage({
+export default function UserProfilePage({
   params,
 }: {
   params: { id: string };
 }) {
-  const user = await getUser(params.id);
-  const currentUserId = await getCurrentUserId();
+  const user = getUser(params.id);
+  const currentUserId = getCurrentUserId();
+
+  if (!user) {
+      notFound();
+  }
+
   const userPosts = mockPosts.filter((p) => p.author.id === user.id);
 
   return (
     <div className='max-w-4xl mx-auto space-y-6'>
       <Card className='overflow-hidden'>
         <div className='relative h-48 w-full bg-muted'>
-          {user.banner_url && (
+          {user.bannerUrl && (
             <Image
-              src={user.banner_url}
+              src={user.bannerUrl}
               alt={`${user.name}'s banner`}
               fill
               className='object-cover'
@@ -56,8 +49,8 @@ export default async function UserProfilePage({
           <div className='flex flex-col md:flex-row gap-6'>
             <div className='relative -mt-24 w-32 h-32 md:-mt-20 md:w-36 md:h-36 shrink-0'>
               <Avatar className='w-full h-full border-4 border-card'>
-                {user.avatar_url && (
-                  <AvatarImage src={user.avatar_url} alt={user.name} />
+                {user.avatarUrl && (
+                  <AvatarImage src={user.avatarUrl} alt={user.name} />
                 )}
                 <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
               </Avatar>
@@ -69,7 +62,7 @@ export default async function UserProfilePage({
                     {user.name}
                   </h1>
                   <p className='text-muted-foreground'>
-                    {user.college} &bull; Class of {user.class_year}
+                    {user.college} &bull; Class of {user.classYear}
                   </p>
                 </div>
                  <UserProfileClient user={user} currentUserId={currentUserId} />
