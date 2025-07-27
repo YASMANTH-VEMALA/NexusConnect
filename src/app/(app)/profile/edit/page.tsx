@@ -1,28 +1,11 @@
 "use client";
-import { useEffect, useState } from "react";
+
 import { ProfileForm } from "@/components/profile/ProfileForm";
-import { supabase } from "@/lib/supabase";
+import { mockCurrentUser } from "@/lib/mock-data";
 import type { User } from "@/lib/types";
 
 export default function EditProfilePage() {
-  const [user, setUser] = useState<User | null>(null);
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (user) {
-        const { data: profile } = await supabase
-          .from("profiles")
-          .select("*")
-          .eq("id", user.id)
-          .single();
-        setUser(profile);
-      }
-    };
-    fetchUser();
-  }, []);
+  const user: User = mockCurrentUser;
 
   if (!user) {
     return <div>Loading...</div>;
