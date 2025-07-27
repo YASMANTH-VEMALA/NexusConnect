@@ -25,6 +25,8 @@ import { useToast } from '@/hooks/use-toast';
 import type { SuggestInterestsOutput } from '@/ai/flows/suggest-interests';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { useRouter } from 'next/navigation';
+import { supabase } from '@/lib/supabase';
+import { v4 as uuidv4 } from 'uuid';
 
 const profileFormSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
@@ -34,6 +36,8 @@ const profileFormSchema = z.object({
   skills: z.array(z.string()),
   interests: z.array(z.string()),
   personality: z.enum(['Introvert', 'Extrovert', 'Ambivert']).optional(),
+  avatar: z.any().optional(),
+  banner: z.any().optional(),
 });
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
@@ -96,14 +100,73 @@ export function ProfileForm({ user }: ProfileFormProps) {
     form.setValue(type, currentValues.filter(v => v !== value), { shouldDirty: true });
   }
 
-
-  function onSubmit(data: ProfileFormValues) {
-    toast({
-      title: 'Profile Updated!',
-      description: 'Your changes have been saved successfully.',
-    });
-    console.log(data);
-    router.push('/profile');
+  async function onSubmit(data: ProfileFormValues) {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        throw new Error('User not found');
+      }
+  
+      let avatarUrl = '';
+      if (data.avatar && data.avatar.length > 0) {
+        const file = data.avatar[0];
+        const { data: uploadData, error } = await supabase.storage
+          .from('avatars')
+          .upload(`${user.id}/${uuidv4()}`, file);
+  
+        if (error) {
+          throw error;
+        }
+  
+        avatarUrl = uploadData.path;
+      }
+  
+      let bannerUrl = '';
+      if (data.banner && data.banner.length > 0) {
+        const file = data.banner[0];
+        const { data: uploadData, error } = await supabase.storage
+          .from('banners')
+          .upload(`${user.id}/${uuidv4()}`, file);
+  
+        if (error) {
+          throw error;
+        }
+  
+        bannerUrl = uploadData.path;
+      }
+  
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .update({
+          name: data.name,
+          college: data.college,
+          class_year: data.classYear,
+          bio: data.bio,
+          skills: data.skills,
+          interests: data.interests,
+          personality: data.personality,
+          avatar_url: avatarUrl,
+          banner_url: bannerUrl,
+        })
+        .eq('id', user.id);
+  
+      if (profileError) {
+        throw profileError;
+      }
+  
+      toast({
+        title: 'Profile Updated!',
+        description: 'Your changes have been saved successfully.',
+      });
+  
+      router.push('/profile');
+    } catch (error: any) {
+      toast({
+        variant: 'destructive',
+        title: 'Update Failed',
+        description: error.message,
+      });
+    }
   }
 
   return (
@@ -114,6 +177,32 @@ export function ProfileForm({ user }: ProfileFormProps) {
             <CardTitle>Personal Information</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
+            <FormField
+              control={form.control}
+              name="avatar"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Avatar</FormLabel>
+                  <FormControl>
+                    <Input type="file" onChange={(e) => field.onChange(e.target.files)} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="banner"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Banner</FormLabel>
+                  <FormControl>
+                    <Input type="file" onChange={(e) => field.onChange(e.target.files)} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="name"

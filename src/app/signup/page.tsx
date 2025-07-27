@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
@@ -16,14 +17,22 @@ export default function SignUp() {
     e.preventDefault();
     setError(null);
     try {
-      const { error } = await supabase.auth.signUp({
+      const { data: { user }, error } = await supabase.auth.signUp({
         email,
         password,
       });
       if (error) {
         setError(error.message);
-      } else {
-        router.push("/discover");
+      } else if (user) {
+        // Create a profile for the new user
+        const { error: profileError } = await supabase
+          .from("profiles")
+          .insert({ id: user.id, email, username });
+        if (profileError) {
+          setError(profileError.message);
+        } else {
+          router.push("/discover");
+        }
       }
     } catch (error: any) {
       setError(error.message);
@@ -40,6 +49,16 @@ export default function SignUp() {
           onSubmit={handleSignUp}
         >
           <div className='w-full max-w-sm'>
+            <Label htmlFor='username'>Username</Label>
+            <Input
+              type='text'
+              id='username'
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
+          </div>
+          <div className='w-full max-w-sm mt-4'>
             <Label htmlFor='email'>Email</Label>
             <Input
               type='email'
