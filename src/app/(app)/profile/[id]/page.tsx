@@ -1,4 +1,3 @@
-"use client";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -7,44 +6,37 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { PostCard } from "@/components/posts/PostCard";
-import { Progress } from "@/components/ui/progress";
-import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import type { User } from "@/lib/types";
 import { mockPosts } from "@/lib/mock-data";
+import { UserProfileClient } from "@/components/profile/UserProfileClient";
 
-export default function UserProfilePage({
+async function getUser(id: string) {
+  const { data: user, error } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("id", id)
+    .single();
+
+  if (error || !user) {
+    notFound();
+  }
+  return user;
+}
+
+async function getCurrentUserId() {
+    const { data: { user } } = await supabase.auth.getUser();
+    return user?.id;
+}
+
+
+export default async function UserProfilePage({
   params,
 }: {
   params: { id: string };
 }) {
-  const [user, setUser] = useState<User | null>(null);
-  const [isCurrentUser, setIsCurrentUser] = useState(false);
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      const { data: user, error } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", params.id)
-        .single();
-      if (error) {
-        notFound();
-      }
-      setUser(user);
-
-      const {
-        data: { user: currentUser },
-      } = await supabase.auth.getUser();
-      setIsCurrentUser(currentUser?.id === user?.id);
-    };
-    fetchUser();
-  }, [params.id]);
-
-  if (!user) {
-    return <div>Loading...</div>;
-  }
-
+  const user = await getUser(params.id);
+  const currentUserId = await getCurrentUserId();
   const userPosts = mockPosts.filter((p) => p.author.id === user.id);
 
   return (
@@ -80,18 +72,7 @@ export default function UserProfilePage({
                     {user.college} &bull; Class of {user.class_year}
                   </p>
                 </div>
-                <div className='flex gap-2 mt-4 md:mt-0'>
-                  {isCurrentUser ? (
-                    <Button asChild>
-                      <Link href='/profile/edit'>Edit Profile</Link>
-                    </Button>
-                  ) : (
-                    <>
-                      <Button>Follow</Button>
-                      <Button variant='outline'>Request Collab</Button>
-                    </>
-                  )}
-                </div>
+                 <UserProfileClient user={user} currentUserId={currentUserId} />
               </div>
               <p className='mt-4 text-sm'>{user.bio}</p>
             </div>
