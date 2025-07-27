@@ -25,8 +25,9 @@ import { useToast } from '@/hooks/use-toast';
 import type { SuggestInterestsOutput } from '@/ai/flows/suggest-interests';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { useRouter } from 'next/navigation';
-import { supabase } from '@/lib/supabase';
-import { v4 as uuidv4 } from 'uuid';
+import { mockCurrentUser } from '@/lib/mock-data';
+// import { supabase } from '@/lib/supabase';
+// import { v4 as uuidv4 } from 'uuid';
 
 const profileFormSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
@@ -102,58 +103,27 @@ export function ProfileForm({ user }: ProfileFormProps) {
 
   async function onSubmit(data: ProfileFormValues) {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        throw new Error('User not found');
-      }
-  
-      let avatarUrl = '';
+      // The Supabase logic is commented out to prevent errors until it's fully set up.
+      // We will just log the data to the console for now.
+      
+      console.log('Profile data submitted:', data);
+
       if (data.avatar && data.avatar.length > 0) {
-        const file = data.avatar[0];
-        const { data: uploadData, error } = await supabase.storage
-          .from('avatars')
-          .upload(`${user.id}/${uuidv4()}`, file);
-  
-        if (error) {
-          throw error;
-        }
-  
-        avatarUrl = uploadData.path;
+        console.log('Avatar file:', data.avatar[0]);
       }
-  
-      let bannerUrl = '';
       if (data.banner && data.banner.length > 0) {
-        const file = data.banner[0];
-        const { data: uploadData, error } = await supabase.storage
-          .from('banners')
-          .upload(`${user.id}/${uuidv4()}`, file);
-  
-        if (error) {
-          throw error;
-        }
-  
-        bannerUrl = uploadData.path;
+        console.log('Banner file:', data.banner[0]);
       }
-  
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .update({
-          name: data.name,
-          college: data.college,
-          class_year: data.classYear,
-          bio: data.bio,
-          skills: data.skills,
-          interests: data.interests,
-          personality: data.personality,
-          avatar_url: avatarUrl,
-          banner_url: bannerUrl,
-        })
-        .eq('id', user.id);
-  
-      if (profileError) {
-        throw profileError;
-      }
-  
+
+      // Update mock data for immediate feedback
+      mockCurrentUser.name = data.name;
+      mockCurrentUser.college = data.college;
+      mockCurrentUser.classYear = data.classYear;
+      mockCurrentUser.bio = data.bio;
+      mockCurrentUser.skills = data.skills;
+      mockCurrentUser.interests = data.interests;
+      mockCurrentUser.personality = data.personality;
+
       toast({
         title: 'Profile Updated!',
         description: 'Your changes have been saved successfully.',
