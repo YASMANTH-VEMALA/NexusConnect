@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Home, Compass, User, LogOut, Settings, Bell, MessageSquare, PanelLeft, Video } from 'lucide-react';
 
 import {
@@ -18,10 +18,17 @@ import {
 } from '@/components/ui/sidebar';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { mockCurrentUser } from '@/lib/mock-data';
+import { supabase } from '@/lib/supabase';
 
 export function AppSidebar() {
   const pathname = usePathname();
+  const router = useRouter();
   const isActive = (path: string) => pathname === path || (path !== '/' && pathname.startsWith(path));
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    router.push('/login');
+  };
 
   return (
     <Sidebar>
@@ -116,7 +123,7 @@ export function AppSidebar() {
             </div>
             <SidebarMenu>
                 <SidebarMenuItem>
-                    <SidebarMenuButton size="icon" variant="ghost" className="h-8 w-8">
+                    <SidebarMenuButton size="icon" variant="ghost" className="h-8 w-8" onClick={handleLogout}>
                         <LogOut size={16} />
                     </SidebarMenuButton>
                 </SidebarMenuItem>
